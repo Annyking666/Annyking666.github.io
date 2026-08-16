@@ -1,0 +1,10 @@
+rk-serif.woff2
+
+标题用的中文字体，从 Noto Serif CJK SC (SemiBold) 里挑出网站实际用到的
+约 650 个字做成的子集，160 KB。完整字体有好几 MB，这样加载快很多。
+
+Noto 字体采用 SIL Open Font License 1.1，可以自由使用和随网站发布。
+许可原文：https://openfontlicense.org
+
+如果你新增了很多内容、标题里出现了子集里没有的字，那些字会自动
+退回系统字体显示（不会乱码，只是字形不统一）。需要重做子集时告诉我。
