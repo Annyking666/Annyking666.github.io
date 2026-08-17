@@ -7,10 +7,10 @@
 <meta name="robots" content="noindex,nofollow">
 <style>
 :root{
-  --bg:#0d0607; --panel:#1a0c0e; --panel2:#140809; --line:#341a1d;
+  --bg:#120809; --panel:#1e0f11; --panel2:#180a0c; --line:#341a1d;
   --blood-1:#b3151c; --blood-2:#5d0a10; --char:#14090a;
-  --slate:#a2908a; --slate-light:#cbbab3; --bright:#f4ebe5;
-  --accent:#d7f205; --accent-soft:rgba(215,242,5,.12);
+  --slate:#b5a08f; --slate-light:#e3d1bf; --bright:#f4ebe5;
+  --accent:#d9a441; --accent-soft:rgba(217,164,65,.12);
   --warn:#ffb86b; --danger:#ff6b6b;
   --font-body:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei","Hiragino Sans GB","Source Han Sans SC",-apple-system,sans-serif;
   --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
@@ -26,7 +26,7 @@ input,textarea,select{font:inherit}
 ::selection{background:var(--accent);color:var(--bg)}
 
 .bar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:10px;
-  padding:12px 20px;background:rgba(13,6,7,.96);backdrop-filter:blur(10px);
+  padding:12px 20px;background:rgba(18,8,9,.96);backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);flex-wrap:wrap}
 .bar::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;
   background:linear-gradient(90deg,var(--blood-1),var(--accent) 60%,transparent)}
@@ -192,10 +192,10 @@ var EDIT_PASS = "20051126";
     return;
   }
   document.documentElement.innerHTML =
-    '<body style="background:#0d0607;color:#a2908a;font-family:sans-serif;'
+    '<body style="background:#120809;color:#b5a08f;font-family:sans-serif;'
     +'display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center">'
     +'<div><p style="margin-bottom:16px">口令不对，无法进入编辑器。</p>'
-    +'<a href="index.html" style="color:#d7f205">← 回到网站</a></div></body>';
+    +'<a href="index.html" style="color:#d9a441">← 回到网站</a></div></body>';
   throw new Error("locked");
 })();
 </script>
