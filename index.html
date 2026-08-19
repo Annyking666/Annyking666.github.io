@@ -87,6 +87,30 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
     radial-gradient(64% 62% at 50% 92%, #26040a 0%, transparent 72%),
     #0b0104;
   animation:drift 26s ease-in-out infinite alternate}
+.gate-bg-img{position:absolute;inset:-8%;z-index:-4;
+  background-image:url("photos/cover_wireframe.png");
+  background-size:contain;background-position:center;background-repeat:no-repeat;
+  background-color:#0e0b12;
+  filter:saturate(1.08) brightness(.86) contrast(1.05);
+  animation:breathe 10s ease-in-out infinite}
+@keyframes breathe{
+  0%,100%{filter:saturate(1.08) brightness(.86) contrast(1.05)}
+  50%     {filter:saturate(1.12) brightness(.97) contrast(1.06)}
+}
+.gate-scan{position:absolute;inset:-8%;z-index:-3;overflow:hidden;pointer-events:none}
+.gate-scan::before{content:"";position:absolute;left:-10%;right:-10%;top:-60%;height:60%;
+  background:linear-gradient(180deg,
+    transparent 0%,
+    rgba(255,150,95,.20) 44%,
+    rgba(255,205,165,.34) 50%,
+    rgba(255,150,95,.20) 56%,
+    transparent 100%);
+  mix-blend-mode:screen;
+  animation:scanSweep 9s linear infinite}
+@keyframes scanSweep{
+  0%   {transform:translateY(0)}
+  100% {transform:translateY(266.6%)}
+}
 @keyframes drift{
   0%  {transform:scale(1.02) translate3d(0,0,0)}
   50% {transform:scale(1.08) translate3d(-1.6%,1.2%,0)}
@@ -115,11 +139,19 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
 .gate-clock .val{display:block;font-family:var(--font-mono);font-size:13px;
   letter-spacing:.06em;color:#fff;opacity:.94;white-space:nowrap}
 
-/* 主区：左下信息 + 右下卡片 */
-.gate-main{position:absolute;z-index:2;
-  left:clamp(24px,4.2vw,72px);right:clamp(24px,4.2vw,72px);
-  bottom:clamp(30px,5.2vh,62px)}
-.gate-box{max-width:640px;text-align:left}
+/* 主区：居中 */
+.gate-main{position:absolute;z-index:2;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:clamp(24px,4.2vw,72px)}
+.gate-box{max-width:620px;width:100%;text-align:center;
+  padding:clamp(36px,5vh,56px) clamp(28px,4vw,52px);
+  border-radius:20px;
+  border:1px solid rgba(255,231,224,.14);
+  background:linear-gradient(150deg, rgba(30,10,10,.38), rgba(8,3,4,.46));
+  box-shadow:0 24px 70px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter:blur(18px) saturate(112%);-webkit-backdrop-filter:blur(18px) saturate(112%)}
+.gate-row{margin-left:auto;margin-right:auto}
+.gate-mark, .gate-tip, .gate-foot{margin-left:auto;margin-right:auto}
 
 .gate-mark{font-family:var(--font-mono);font-size:11px;letter-spacing:.32em;
   color:#ffe7e0;opacity:.66;margin-bottom:14px;text-transform:uppercase}
@@ -767,6 +799,8 @@ body.desk-on .stage{max-width:none;margin:0;padding:0;height:100vh}
 <!-- ========== 封面页 ========== -->
 <div id="gate">
   <div class="gate-field"></div>
+  <div class="gate-bg-img"></div>
+  <div class="gate-scan"></div>
   <canvas id="gateCanvas" aria-hidden="true"></canvas>
   <video class="gate-bg" autoplay muted loop playsinline
          disablepictureinpicture aria-hidden="true" id="gateVideo">
@@ -786,9 +820,9 @@ body.desk-on .stage{max-width:none;margin:0;padding:0;height:100vh}
 
   <div class="gate-main">
     <div class="gate-box">
-      <p class="gate-mark anim">私人记录 · 需要口令</p>
+      <p class="gate-mark anim">社会研究记录 · 需要口令</p>
       <span class="gate-name-wrap"><h1 class="gate-name" id="gateName">杨若莹</h1></span>
-      <p class="gate-tip anim">作品、随笔、回忆和眼下的打算，都在里面。</p>
+      <p class="gate-tip anim">田野里的观察、正在做的研究，和一点个人的边角料。</p>
       <div class="gate-row anim">
         <input id="gateIn" type="password" inputmode="numeric" autocomplete="off"
                placeholder="口令" aria-label="访问口令">
