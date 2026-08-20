@@ -76,19 +76,14 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
 #gate.hide{display:none}
 
 /* 背景：台阶远山照片，静止不动，只做极轻微的呼吸 */
-.gate-bg{display:none}
-#gateCanvas{display:none}
-.gate-field{display:none}
 .gate-bg-img{position:absolute;inset:0;z-index:-4;
   background-image:url("photos/cover_stairs.png");
   background-size:cover;background-position:center;background-repeat:no-repeat;
   background-color:var(--bg)}
-.gate-scan{display:none}
 
 /* 只在照片右侧（风景一侧）压一层极淡的白，帮文字区和照片衔接得更干净 */
 .gate-veil{position:absolute;inset:0;z-index:-2;pointer-events:none;
   background:linear-gradient(90deg, rgba(253,252,250,.08) 0%, rgba(253,252,250,0) 20%)}
-.gate-grain{display:none}
 
 /* 顶栏 */
 .gate-top{position:absolute;top:clamp(20px,2.8vh,34px);
@@ -185,9 +180,6 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
 #hall{position:fixed;inset:0;z-index:150;overflow:hidden;background:var(--bg);display:none;
   --mx:50%;--my:42%}
 #hall.on{display:block}
-#hallCanvas{display:none}
-.hall-veil{display:none}
-.hall-grain{display:none}
 
 /* 背景地图：暗层打底，亮层用跟随鼠标的圆形遮罩露出来，像手电筒 */
 .hall-map{position:absolute;inset:0;z-index:0;pointer-events:none;
@@ -283,173 +275,15 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
 .pw-box p{font-size:13.5px;color:var(--slate);margin-bottom:18px}
 
 /* ============================================================
-   桌面（首页）—— 竖向 3D 轮播
-   ============================================================ */
-body.desk-on{overflow:hidden}
-.stage{position:relative;z-index:2;max-width:1120px;margin:0 auto;
-  padding:clamp(40px,7vh,84px) clamp(20px,4vw,40px) 90px}
-body.desk-on .stage{max-width:none;margin:0;padding:0;height:100vh}
-
-.scene{position:absolute;inset:0;overflow:hidden;
-  background:
-    radial-gradient(44% 50% at 24% 20%, #7e0f16 0%, transparent 60%),
-    radial-gradient(48% 44% at 76% 36%, #55090f 0%, transparent 64%),
-    radial-gradient(64% 62% at 50% 92%, #26040a 0%, transparent 72%),
-    #120809;
-  display:flex;align-items:center;justify-content:center}
-.camera{position:relative;width:100%;height:100%;
-  display:flex;align-items:center;justify-content:center;
-  perspective:1350px;pointer-events:none}
-.rail{position:absolute;transform-style:preserve-3d}
-.slot{position:absolute;inset:0;transform-style:preserve-3d;
-  backface-visibility:visible;pointer-events:auto;cursor:pointer;
-  background:none;padding:0;border:0}
-
-/* 一张卡 = 五层薄片叠出真实厚度 */
-.face{position:absolute;inset:0;border-radius:7px;overflow:hidden;
-  border:1px solid rgba(255,255,255,.1);
-  box-shadow:inset 0 1px 1px rgba(255,255,255,.1)}
-.slab{position:absolute;inset:0;border-radius:7px;
-  background:var(--c-lo);border:1px solid var(--c-lo);filter:brightness(.58)}
-.face-front{background:#3a2712;backface-visibility:hidden}
-.face-back{background:#241708;backface-visibility:hidden}
-
-/* 正面：卷轴——木轴 + 宣纸卷身，颜色随栏目色轻微染色 */
-.scroll{position:absolute;inset:0;display:flex;flex-direction:column;padding:3% 0}
-.scroll-rod{flex:none;height:8.5%;position:relative;border-radius:5px;
-  background:
-    repeating-linear-gradient(96deg,
-      rgba(255,255,255,.09) 0 2px, transparent 2px 5px, rgba(0,0,0,.14) 5px 7px),
-    linear-gradient(180deg,#e7c470,#a97a2c 55%,#6e4c1c);
-  box-shadow:0 2px 6px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.22)}
-.scroll-rod::before,.scroll-rod::after{content:"";position:absolute;top:0;bottom:0;width:10%;
-  border-radius:50%;
-  background:radial-gradient(circle at 35% 30%, #f3d691, #8a611f 70%, #5c4118);
-  box-shadow:0 1px 4px rgba(0,0,0,.5)}
-.scroll-rod::before{left:-3.5%}
-.scroll-rod::after{right:-3.5%}
-.scroll-rod-bot{margin-top:auto}
-
-.scroll-body{flex:1;position:relative;margin:2% 2.5% 0;overflow:hidden;
-  background:
-    linear-gradient(90deg, rgba(0,0,0,.14), transparent 8%, transparent 92%, rgba(0,0,0,.14)),
-    linear-gradient(175deg,#eadfc4,#d9c69e)}
-.scroll-body::before{content:"";position:absolute;inset:0;opacity:.55;mix-blend-mode:multiply;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.55  0 0 0 0 0.47  0 0 0 0 0.34  0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  background-size:64px 64px}
-.scroll-body::after{content:"";position:absolute;inset:9px;border:1px solid rgba(93,10,16,.22);
-  pointer-events:none}
-.scroll-tint{position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(85% 65% at 100% 0%, var(--c-mid), transparent 62%);
-  opacity:.2;mix-blend-mode:multiply}
-
-.scroll-title{position:absolute;top:15%;left:0;right:0;margin:0 auto;height:58%;
-  text-align:center;writing-mode:vertical-rl;letter-spacing:.16em;
-  font-family:var(--font-display);font-weight:700;color:var(--c-ink);
-  font-size:clamp(17px,4vw,23px)}
-.scroll-meta{position:absolute;left:0;right:0;bottom:7%;text-align:center;
-  font-family:var(--font-mono);font-size:9.5px;letter-spacing:.16em;
-  color:var(--c-ink);opacity:.58}
-
-/* 背面：卷轴收起后露出的木纹端面（年轮） */
-.scroll-back{position:absolute;inset:0;
-  background:
-    repeating-linear-gradient(95deg, rgba(255,255,255,.05) 0 2px, transparent 2px 6px),
-    linear-gradient(160deg,#5c4118,#2a1c0d)}
-.sb-ring{position:absolute;left:50%;top:46%;width:56%;aspect-ratio:1;border-radius:50%;
-  transform:translate(-50%,-50%);
-  background:repeating-radial-gradient(circle at 50% 50%,
-    #caa25c 0 3px, #9c7433 3px 6px, #7a5620 6px 9px);
-  box-shadow:0 3px 14px rgba(0,0,0,.5), inset 0 0 0 2px rgba(0,0,0,.25)}
-.sb-ring::after{content:"";position:absolute;inset:38%;border-radius:50%;
-  background:radial-gradient(circle at 35% 30%,#e9c98a,#8a611f);
-  box-shadow:inset 0 0 6px rgba(0,0,0,.4)}
-.sb-label{position:absolute;left:0;right:0;bottom:11%;text-align:center;
-  font-family:var(--font-mono);letter-spacing:.18em;color:rgba(244,235,229,.75);font-size:11px}
-.sb-label small{display:block;margin-top:5px;font-size:9.5px;
-  letter-spacing:.14em;color:rgba(244,235,229,.42)}
-
-/* 点击中间那张：卷轴向上下展开，再进入栏目 */
-.scroll-rod{transition:transform .56s cubic-bezier(.16,1,.3,1)}
-.scroll-body{transition:transform .56s cubic-bezier(.16,1,.3,1), filter .56s var(--ease)}
-.slot{transition:box-shadow .56s var(--ease)}
-.slot.opening .scroll-rod-top{transform:translateY(-260%)}
-.slot.opening .scroll-rod-bot{transform:translateY(260%)}
-.slot.opening .scroll-body{transform:scaleY(1.16);filter:brightness(1.16)}
-.slot.opening{box-shadow:0 0 50px 10px var(--accent-soft)}
-@media (prefers-reduced-motion:reduce){
-  .scroll-rod, .scroll-body, .slot{transition:none}
-}
-
-/* 场景上的少量文字 */
-.hud{position:absolute;z-index:5;pointer-events:none}
-.hud-top{top:clamp(18px,3vh,34px);left:clamp(20px,3.4vw,44px)}
-.hud-mark{font-family:var(--font-mono);font-size:11px;letter-spacing:.3em;
-  color:var(--accent);text-transform:uppercase}
-.hud-name{font-family:var(--font-display);font-size:clamp(22px,2.6vw,30px);
-  font-weight:700;letter-spacing:.04em;color:var(--slate-bright);margin-top:8px}
-.hud-lede{margin-top:8px;max-width:17em;font-size:13px;color:var(--slate);line-height:1.7}
-/* 侧边快捷：五个色块，点一下直达 */
-.jump{position:absolute;z-index:6;right:clamp(16px,2.6vw,34px);top:50%;
-  transform:translateY(-50%);display:flex;flex-direction:column;gap:12px}
-.jump button{display:flex;align-items:center;gap:10px;padding:0;background:none;border:0;
-  cursor:pointer;flex-direction:row-reverse}
-.jump .sw{width:12px;height:22px;border-radius:2px;background:var(--c-mid);
-  opacity:.42;transition:opacity .25s var(--ease),transform .25s var(--ease),
-  box-shadow .25s var(--ease)}
-.jump .nm{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;
-  color:var(--slate);opacity:0;transform:translateX(6px);
-  transition:opacity .25s var(--ease),transform .25s var(--ease);white-space:nowrap}
-.jump button:hover .sw,.jump button:focus-visible .sw{opacity:.85;transform:scaleY(1.14)}
-.jump button:hover .nm,.jump button:focus-visible .nm{opacity:1;transform:none}
-.jump button.on .sw{opacity:1;transform:scaleY(1.32);box-shadow:0 0 12px var(--c-mid)}
-.jump button.on .nm{opacity:1;transform:none;color:var(--slate-bright)}
-@media (max-width:520px){
-  .jump{right:10px;gap:9px}
-  .jump .sw{width:9px;height:17px}
-  .jump .nm{display:none}
-}
-
-/* 桌面：主线一句话 */
-.hud-thesis{margin-top:var(--s2);max-width:16em;font-family:var(--font-display);
-  font-size:15.5px;line-height:1.75;color:var(--slate-light);
-  padding-left:12px;border-left:2px solid var(--accent)}
-/* 桌面：最近三条 */
-.hud-recent{left:clamp(20px,3.4vw,44px);bottom:clamp(18px,3vh,32px);
-  pointer-events:auto;max-width:min(380px,42vw)}
-.hr-lab{font-family:var(--font-mono);font-size:10px;letter-spacing:.22em;
-  color:var(--slate);text-transform:uppercase;margin-bottom:var(--s1)}
-.hud-recent li{margin-bottom:5px}
-.hud-recent a{display:flex;align-items:baseline;gap:9px;padding:3px 0;
-  transition:color .2s var(--ease)}
-.hr-dot{flex:none;width:7px;height:7px;border-radius:2px;background:var(--c-mid)}
-.hr-t{flex:1;min-width:0;font-size:13px;color:var(--slate-light);
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hud-recent a:hover .hr-t{color:var(--slate-bright)}
-.hr-d{flex:none;font-family:var(--font-mono);font-size:10.5px;color:var(--slate);opacity:.7}
-/* 桌面右上：封面 / 搜索 */
-.hud-tools{position:absolute;z-index:6;top:clamp(18px,3vh,34px);
-  right:clamp(78px,9vw,120px);display:flex;gap:8px}
-.hud-btn{padding:6px 13px;border-radius:2px;
-  border:1px solid var(--line);background:rgba(253,252,250,.7);
-  font-family:var(--font-mono);font-size:11.5px;letter-spacing:.12em;color:var(--slate);
-  cursor:pointer;transition:color .2s var(--ease),border-color .2s var(--ease)}
-.hud-btn:hover{color:var(--accent);border-color:var(--accent)}
-@media (max-width:520px){ #toCover{display:none} }
-@media (max-width:820px){ .hud-recent{display:none} }
-
-.hud-hint{position:absolute;z-index:5;pointer-events:none;
-  right:clamp(20px,3.4vw,44px);bottom:clamp(18px,3vh,32px);
-  font-family:var(--font-mono);font-size:10px;letter-spacing:.16em;
-  color:var(--slate);opacity:.5;white-space:nowrap}
-@media (max-width:820px){
-  .hud-lede,.hud-hint{display:none}
-}
-@media (max-height:560px){ .hud-lede{display:none} }
-
-/* ============================================================
    桌面（首页）—— 分栏卡片
    ============================================================ */
+.stage{position:relative;z-index:2;max-width:1120px;margin:0 auto;
+  padding:clamp(40px,7vh,84px) clamp(20px,4vw,40px) 90px}
+
+.hud-mark{font-family:var(--font-mono);font-size:11px;letter-spacing:.3em;
+  color:var(--accent);text-transform:uppercase}
+.hr-d{flex:none;font-family:var(--font-mono);font-size:10.5px;color:var(--slate);opacity:.7}
+
 .bento-head{display:flex;align-items:flex-start;justify-content:space-between;
   gap:24px;margin-bottom:clamp(28px,4vh,44px)}
 .bento-head-l{max-width:42em}
@@ -847,7 +681,7 @@ body.desk-on .stage{max-width:none;margin:0;padding:0;height:100vh}
 .badge{display:inline-block;margin-left:10px;vertical-align:2px;font-family:var(--font-mono);
   font-size:11px;letter-spacing:.08em;padding:2px 9px;border-radius:2px;border:1px solid currentColor}
 .s-doing .dot{border-color:var(--accent);background:var(--accent);
-  box-shadow:0 0 0 5px var(--accent-soft),0 0 14px rgba(215,242,5,.45)}
+  box-shadow:0 0 0 5px var(--accent-soft),0 0 14px rgba(23,20,15,.18)}
 .s-doing .badge{color:var(--accent)}
 .s-done .dot{border-color:var(--slate-light);background:var(--slate-light)}
 .s-done .badge,.s-done .step-title{color:var(--slate-light)}
@@ -871,17 +705,8 @@ body.desk-on .stage{max-width:none;margin:0;padding:0;height:100vh}
 
 <!-- ========== 封面页 ========== -->
 <div id="gate">
-  <div class="gate-field"></div>
   <div class="gate-bg-img"></div>
-  <div class="gate-scan"></div>
-  <canvas id="gateCanvas" aria-hidden="true"></canvas>
-  <video class="gate-bg" autoplay muted loop playsinline
-         disablepictureinpicture aria-hidden="true" id="gateVideo">
-    <!-- 想换成视频封面：把文件命名 cover.mp4 放进 photos 文件夹即可 -->
-    <source src="photos/cover.mp4" type="video/mp4">
-  </video>
   <div class="gate-veil"></div>
-  <div class="gate-grain"></div>
 
   <header class="gate-top">
     <span class="gate-brand anim"><b>◆</b> <span id="gateHandle">ruoyingking</span></span>
@@ -910,11 +735,8 @@ body.desk-on .stage{max-width:none;margin:0;padding:0;height:100vh}
 
 <!-- ========== 门厅 ========== -->
 <div id="hall" aria-hidden="true">
-  <canvas id="hallCanvas"></canvas>
   <div class="hall-map"></div>
   <div class="hall-map lit"></div>
-  <div class="hall-veil"></div>
-  <div class="hall-grain"></div>
   <div class="hall-wrap">
     <div class="hall-top">
       <span class="hall-mark"><b>◆</b> <span id="hallHandle">ruoyingking</span></span>
@@ -1011,130 +833,6 @@ function gdel(){
 function get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 function set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 function del(k){ try{ localStorage.removeItem(k); }catch(e){} }
-
-/* ============================================================
-   封面背景：缓慢游动的发光脉络
-   纯 canvas 绘制，没有外部素材，几十 KB
-   ============================================================ */
-(function(){
-  var cv = document.getElementById("gateCanvas");
-  if(!cv) return;
-  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){
-    cv.style.display="none"; return;
-  }
-  var ctx = cv.getContext("2d"), W=0, H=0, DPR=1, raf=null, t=0;
-
-  /* 每根脉络：一串随时间摆动的控制点 */
-  function makeVein(i, n){
-    var seeds=[];
-    for(var k=0;k<6;k++){
-      seeds.push({
-        a: 0.06 + Math.random()*0.16,          // 振幅
-        f: 0.10 + Math.random()*0.34,          // 频率
-        p: Math.random()*Math.PI*2             // 相位
-      });
-    }
-    return {
-      y0: (i + 0.5)/n,                          // 起始高度
-      drift: 0.55 + Math.random()*0.9,          // 漂移速度
-      thick: 0.6 + Math.random()*1.9,
-      hot: Math.random() < 0.24,                // 少数几根带荧光高光
-      seeds: seeds,
-      off: Math.random()*1000
-    };
-  }
-  var N = 13, veins = [];
-  for(var i=0;i<N;i++) veins.push(makeVein(i,N));
-
-  function resize(){
-    DPR = Math.min(window.devicePixelRatio||1, 1.6);
-    W = cv.clientWidth; H = cv.clientHeight;
-    cv.width = Math.floor(W*DPR); cv.height = Math.floor(H*DPR);
-    ctx.setTransform(DPR,0,0,DPR,0,0);
-  }
-
-  function pathY(v, x, time){
-    var y = v.y0;
-    for(var k=0;k<v.seeds.length;k++){
-      var s = v.seeds[k];
-      y += s.a * Math.sin(x*s.f*6.0 + time*v.drift*0.32 + s.p + v.off);
-    }
-    return y*H;
-  }
-
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    ctx.globalCompositeOperation = "lighter";
-    ctx.lineCap = "round";
-
-    for(var i=0;i<veins.length;i++){
-      var v = veins[i];
-      /* 先铺一层宽而暗的辉光，再叠一层细而亮的芯 */
-      for(var pass=0; pass<2; pass++){
-        var g = ctx.createLinearGradient(0,0,W,0);
-        if(v.hot){
-          g.addColorStop(0,   "rgba(215,242,5,0)");
-          g.addColorStop(0.30,"rgba(215,242,5,"+(pass?0.42:0.10)+")");
-          g.addColorStop(0.60,"rgba(255,110,70,"+(pass?0.48:0.12)+")");
-          g.addColorStop(1,   "rgba(215,242,5,0)");
-        } else {
-          g.addColorStop(0,   "rgba(180,20,28,0)");
-          g.addColorStop(0.22,"rgba(226,40,46,"+(pass?0.58:0.15)+")");
-          g.addColorStop(0.52,"rgba(255,96,80,"+(pass?0.66:0.17)+")");
-          g.addColorStop(0.80,"rgba(214,32,40,"+(pass?0.50:0.13)+")");
-          g.addColorStop(1,   "rgba(150,14,22,0)");
-        }
-        ctx.strokeStyle = g;
-        ctx.lineWidth = pass ? v.thick : v.thick*7.5;
-
-        /* 分段描边：用一个缓慢移动的包络控制浓淡，做出丝的断续感 */
-        var steps = 64, prevX = 0, prevY = 0;
-        for(var j=0;j<=steps;j++){
-          var u = j/steps, x = u*W, y = pathY(v, u, t);
-          if(j>0){
-            var mid = (u + (j-1)/steps)/2;
-            var env = 0.5 + 0.5*Math.sin(mid*Math.PI*2*1.4 + t*v.drift*0.5 + v.off);
-            env = Math.pow(env, 1.7);
-            if(env > 0.02){
-              ctx.globalAlpha = env;
-              ctx.beginPath();
-              ctx.moveTo(prevX, prevY);
-              ctx.lineTo(x, y);
-              ctx.stroke();
-            }
-          }
-          prevX = x; prevY = y;
-        }
-        ctx.globalAlpha = 1;
-      }
-    }
-    ctx.globalCompositeOperation = "source-over";
-    t += 0.016;
-    raf = requestAnimationFrame(draw);
-  }
-
-  function start(){ if(!raf){ resize(); draw(); } }
-  function stop(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
-
-  window.addEventListener("resize", function(){ if(raf) resize(); });
-  /* 进入网站或切到后台就停下，不白耗电 */
-  document.addEventListener("visibilitychange", function(){
-    document.hidden ? stop() : (document.getElementById("gate").classList.contains("hide") || start());
-  });
-  window.__gateBgStop = stop;
-  window.__gateBgStart = start;
-  start();
-})();
-
-/* 没有 photos/cover.mp4 时移除视频层，露出生成的红色背景 */
-(function(){
-  var v=document.getElementById("gateVideo");
-  if(!v) return;
-  var src=v.querySelector("source");
-  if(src) src.addEventListener("error", function(){ v.style.display="none"; });
-  v.addEventListener("error", function(){ v.style.display="none"; });
-  setTimeout(function(){ if(!v.videoWidth) v.style.display="none"; }, 1200);
-})();
 
 
 /* 封面右上角的时钟 */
@@ -1357,12 +1055,6 @@ function countOf(f){
 
 
 
-/* 门厅的 3D 场景在 vendor/hall3d.js（Three.js），通过 window.Hall3D 调用 */
-var Snake = {
-  start: function(){ if(window.Hall3D) window.Hall3D.start(); },
-  stop:  function(){ if(window.Hall3D) window.Hall3D.stop(); }
-};
-
 /* ============================================================
    门厅：填内容 + 进出
    ============================================================ */
@@ -1426,8 +1118,6 @@ function showHall(){
   h.setAttribute("aria-hidden","false");
   document.body.style.overflow="hidden";
   document.documentElement.style.overflow="hidden";
-  Snake.start();
-  if(window.__carouselStop) window.__carouselStop();
   setTimeout(function(){ var g=document.getElementById("hallGo"); if(g) g.focus(); }, 120);
 }
 function hideHall(toDesk){
@@ -1437,7 +1127,6 @@ function hideHall(toDesk){
   h.setAttribute("aria-hidden","true");
   document.body.style.overflow="";
   document.documentElement.style.overflow="";
-  Snake.stop();
   /* 从门厅进来一律先落在桌面，保证 封面 → 门厅 → 桌面 的顺序 */
   if(toDesk !== false && location.hash && location.hash !== "#/"){
     location.hash = "#/";      /* 会触发 hashchange → render */
@@ -1559,13 +1248,6 @@ function doingList(){
 /* ============================================================
    桌面
    ============================================================ */
-function hereNode(){
-  var d = contentOf("plan");
-  var nodes = (d && d.nodes) || [];
-  for(var i=0;i<nodes.length;i++) if(nodes[i].status==="here") return nodes[i];
-  return null;
-}
-
 var METHOD_WORDS = ["深度访谈","参与观察","漫游法","文本分析","问卷调查","个案追踪","口述整理","扎根编码"];
 
 function viewDesk(){
@@ -1629,28 +1311,6 @@ function viewDesk(){
 
   +   '</div>'
   +   '<p class="bento-hint">点卡片进入对应的栏目</p>'
-  + '</div>';
-}
-
-/* 卡片的正反两面 */
-function cardFaces(f){
-  return ''
-  + '<div class="face face-front">'
-  +   '<div class="scroll">'
-  +     '<div class="scroll-rod scroll-rod-top"></div>'
-  +     '<div class="scroll-body">'
-  +       '<div class="scroll-tint"></div>'
-  +       '<span class="scroll-title">'+esc(f.name)+'</span>'
-  +       '<span class="scroll-meta">'+esc(countOf(f))+'</span>'
-  +     '</div>'
-  +     '<div class="scroll-rod scroll-rod-bot"></div>'
-  +   '</div>'
-  + '</div>';
-}
-function cardBack(f){
-  return '<div class="face face-back">'
-  +   '<div class="scroll-back"><div class="sb-ring"></div>'
-  +   '<div class="sb-label">'+esc(f.name)+'<small>'+esc(f.sub||"")+'</small></div></div>'
   + '</div>';
 }
 
@@ -2167,8 +1827,6 @@ function render(){
   markBroken();
   wireLedger();
   wireMap();
-  Carousel.stop();
-  if(!found) Carousel.start();
   window.scrollTo(0,0);
 }
 window.addEventListener("hashchange", render);
@@ -2180,213 +1838,6 @@ function markBroken(){
     img.addEventListener("error", mark);
   });
 }
-
-/* ============================================================
-   竖向 3D 轮播引擎
-   连续推进 → 中心停顿 → 翻转着退出屏幕
-   ============================================================ */
-var Carousel = (function(){
-  var rail=null, slots=[], raf=null, on=false, swatches=[], lastCenter=-1;
-  var N = FOLDERS.length;
-  var progress = 0, target = null;   /* target 不为空时表示正在转向某一张 */
-  var m = { x:0, y:0, tx:0, ty:0 };
-  var W = 336, H = 211;
-  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  var SPEED = 0.0016;   /* 每帧推进量 */
-  var GAP   = 36;       /* 中心卡与相邻卡的间距 */
-  var PEEK  = -55;      /* 边缘卡探出屏幕的量 */
-  var D     = 1350;     /* 透视距离 */
-  var TILT_Y = 15, TILT_X = 12, DAMP = 0.08;
-
-  function metrics(){
-    var w = innerWidth, h = innerHeight;
-    var cw = Math.round(w*0.16 + 130);
-    var hf = Math.min(1, Math.max(0.65, h/850));
-    cw = Math.round(cw*hf);
-    cw = Math.min(336, Math.max(150, cw));
-    W = cw; H = Math.round(cw/1.5925);
-    if(rail){ rail.style.width = W+"px"; rail.style.height = H+"px"; }
-    slots.forEach(function(el){ el.style.width=W+"px"; el.style.height=H+"px"; });
-  }
-
-  function onMove(e){
-    var rx = (e.clientX - innerWidth/2)/(innerWidth/2);
-    var ry = (e.clientY - innerHeight/2)/(innerHeight/2);
-    m.tx = Math.max(-1, Math.min(1, rx));
-    m.ty = Math.max(-1, Math.min(1, ry));
-  }
-  function onLeave(){ m.tx = 0; m.ty = 0; }
-  function onWheel(e){
-    e.preventDefault();
-    target = null;
-    progress += Math.max(-1, Math.min(1, e.deltaY/240)) * 0.42;
-  }
-
-  function frame(){
-    if(target === null){
-      progress += SPEED;
-    } else {
-      progress += (target - progress) * 0.11;
-      if(Math.abs(target - progress) < 0.0025){ progress = target; target = null; }
-    }
-    m.x += (m.tx - m.x)*DAMP;
-    m.y += (m.ty - m.y)*DAMP;
-
-    var h = innerHeight;
-    var rounded = Math.round(progress);
-    var diff = progress - rounded;
-    /* 非线性磁吸：中心位置略作停留，然后加速去下一张 */
-    var eased = Math.sign(diff)*Math.pow(Math.abs(diff)*2, 4.2)/2;
-    var active = rounded + eased;
-
-    for(var i=0;i<N;i++){
-      var card = slots[i];
-      if(!card) continue;
-
-      var offset = i - active, half = N/2;
-      while(offset >  half) offset -= N;
-      while(offset < -half) offset += N;
-
-      var abs = Math.abs(offset), sign = Math.sign(offset);
-      if(abs > 3){ card.style.visibility="hidden"; continue; }
-      card.style.visibility = "visible";
-
-      var y=0, z=0, rot=0, t, e;
-      if(abs <= 1){
-        t = abs; e = t*t*(3-2*t);
-        y = -sign * (e * (H + GAP));
-        z = 400 + e*(220-400);
-        rot = e*132;
-      } else if(abs <= 2){
-        t = abs-1; e = t*t*(3-2*t);
-        var yS = H+GAP, zS = 220, rS = 132, zE = -60, rE = 175;
-        var sE = D/(D-zE);
-        var yE = (h/2 - PEEK)/sE - (H/2);
-        y = -sign * (yS + e*(yE-yS));
-        z = zS + e*(zE-zS);
-        rot = rS + e*(rE-rS);
-      } else {
-        t = Math.min(abs-2, 1); e = t*t*(3-2*t);
-        var zS2 = -60, rS2 = 175, zE3 = -250, rE3 = 195;
-        var s2 = D/(D-zS2), y2 = (h/2 - PEEK)/s2 - (H/2);
-        var s3 = D/(D-zE3), y3 = (h/2 + 100)/s3 + (H/2);
-        y = -sign * (y2 + e*(y3-y2));
-        z = zS2 + e*(zE3-zS2);
-        rot = rS2 + e*(rE3-rS2);
-      }
-
-      var localRot = -sign*rot;
-      var center = Math.max(0, 1-abs);
-      var rx = localRot + (-m.y * TILT_X * center);
-      var ry = m.x * TILT_Y * center;
-
-      card.style.zIndex = Math.round(z);
-      card.style.transform =
-        "translateY("+y.toFixed(2)+"px) translateZ("+z.toFixed(2)+"px) rotateX("
-        + rx.toFixed(2)+"deg) rotateY("+ry.toFixed(2)+"deg) rotateZ(-3deg)";
-    }
-
-    var c = centerIndex();
-    if(c !== lastCenter){
-      lastCenter = c;
-      for(var k=0;k<swatches.length;k++) swatches[k].classList.toggle("on", k===c);
-    }
-    raf = requestAnimationFrame(frame);
-  }
-
-  /* 当前停在中间的是哪一张 */
-  function centerIndex(){
-    var r = Math.round(progress) % N;
-    return (r % N + N) % N;
-  }
-
-  function build(){
-    rail = document.getElementById("rail");
-    if(!rail) return false;
-    /* 厚度：五片薄片，间距 0.73px，正面最前、背面最后 */
-    var LAY = [-1.47,-0.73,0,0.73,1.47];
-    rail.innerHTML = FOLDERS.map(function(f,i){
-      var mids = LAY.slice(1,-1).map(function(z){
-        return '<div class="slab" style="transform:translateZ('+z+'px)"></div>'; }).join("");
-      return '<button class="slot" data-i="'+i+'" style="'+fvars(f)+'" '
-        + 'aria-label="'+esc(f.name)+'">'
-        + '<div style="position:absolute;inset:0;transform:translateZ('+LAY[0]+'px) rotateX(180deg);'
-        +   'transform-style:preserve-3d">'+cardBack(f)+'</div>'
-        + mids
-        + '<div style="position:absolute;inset:0;transform:translateZ('+LAY[4]+'px)">'
-        +   cardFaces(f)+'</div>'
-        + '</button>';
-    }).join("");
-    slots = $$(".slot", rail);
-    swatches = $$("[data-jump]");
-    lastCenter = -1;
-    return true;
-  }
-
-  function start(){
-    if(!build()) return;
-    on = true;
-    document.body.classList.add("desk-on");
-    metrics();
-    progress = 0;
-    window.addEventListener("resize", metrics);
-    if(!reduce){
-      window.addEventListener("mousemove", onMove);
-      document.addEventListener("mouseleave", onLeave);
-    }
-    var sc = document.getElementById("scene");
-    if(sc) sc.addEventListener("wheel", onWheel, {passive:false});
-    raf = requestAnimationFrame(frame);
-  }
-  function stop(){
-    on = false;
-    document.body.classList.remove("desk-on");
-    if(raf){ cancelAnimationFrame(raf); raf=null; }
-    window.removeEventListener("resize", metrics);
-    window.removeEventListener("mousemove", onMove);
-    document.removeEventListener("mouseleave", onLeave);
-    slots = []; swatches = []; rail = null;
-  }
-  function goTo(i){
-    /* 找到第 i 张最近的等价位置，缓动过去而不是瞬移 */
-    var best = i, bestD = Infinity;
-    for(var k=-3;k<=3;k++){
-      var cand = i + k*N, d = Math.abs(cand - progress);
-      if(d < bestD){ bestD = d; best = cand; }
-    }
-    target = best;
-  }
-  document.addEventListener("visibilitychange", function(){
-    if(!on) return;
-    if(document.hidden){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
-    else if(!raf) raf = requestAnimationFrame(frame);
-  });
-  window.__carouselStop = stop;
-  return { start:start, stop:stop, center:centerIndex, goTo:goTo, running:function(){ return on; } };
-})();
-
-/* 点右侧色块：直接把对应的袋子转到中间 */
-document.addEventListener("click", function(e){
-  var j = e.target.closest && e.target.closest("[data-jump]");
-  if(!j) return;
-  Carousel.goTo(+j.getAttribute("data-jump"));
-});
-
-/* 点卡片：中间那张先播放"卷轴展开"，再打开；其它先转到中间 */
-document.addEventListener("click", function(e){
-  var btn = e.target.closest && e.target.closest(".slot");
-  if(!btn) return;
-  var i = +btn.getAttribute("data-i");
-  if(i !== Carousel.center()){ Carousel.goTo(i); return; }
-  if(btn.classList.contains("opening")) return;
-  btn.classList.add("opening");
-  var scene = document.getElementById("scene");
-  setTimeout(function(){
-    if(scene) scene.style.transition = "opacity .24s var(--ease)", scene.style.opacity = "0";
-  }, 560);
-  setTimeout(function(){ location.hash = "#/" + FOLDERS[i].id; }, 780);
-});
 
 /* 灯箱 */
 var lb=$("#lb"), lbImg=$("#lbImg"), lbCap=$("#lbCap"), lbCount=$("#lbCount"), cur=0, lastFocus=null;
@@ -2424,15 +1875,6 @@ document.addEventListener("keydown", function(e){
 
 render();
 })();
-</script>
-<!-- 门厅：阴阳龙纹图腾（线稿由你的 3D 模型提取） -->
-<script src="totem.js"></script>
-<script src="vendor/totem.js"></script>
-<script>
-  (function(){
-    var h = document.getElementById("hall");
-    if(h && h.classList.contains("on") && window.Hall3D) window.Hall3D.start();
-  })();
 </script>
 </body>
 </html>
