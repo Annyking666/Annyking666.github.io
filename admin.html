@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>编辑 · ruoyingking</title>
 <meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23120809'/%3E%3Cpath d='M16 4 L28 16 L16 28 L4 16 Z' fill='%23d9a441'/%3E%3C/svg%3E">
 <style>
 :root{
   --bg:#120809; --panel:#1e0f11; --panel2:#180a0c; --line:#341a1d;
@@ -967,7 +968,9 @@ function buildNav(){
   $("#goSite").addEventListener("click",function(){ location.href="index.html"; });
 }
 
+var curTab = "basic";
 function go(id){
+  curTab = id;
   $$("[data-tab]").forEach(function(b){ b.classList.toggle("on",b.getAttribute("data-tab")===id); });
   if(id==="basic")    { paneBasic();    window.scrollTo(0,0); return; }
   if(id==="sections") { paneSections(); window.scrollTo(0,0); return; }
@@ -1149,7 +1152,7 @@ function publish(c){
     log("全部成功。GitHub Pages 一般一两分钟后生效。","ok");
     if(hasPrivate()) log("私密台账没有上传，仍然只在这台电脑上。","ok");
     btn.disabled=false;
-    paneAlbum();
+    go(curTab);
   }).catch(function(e){
     log("失败："+e.message,"er");
     log("常见原因：令牌过期或权限不足（需要 Contents: Read and write）；用户名/仓库名写错；分支名不是 main。","er");
