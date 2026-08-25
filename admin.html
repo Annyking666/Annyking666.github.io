@@ -223,7 +223,6 @@ var TYPES = {
   list:  {name:"条目",  hint:"卡片列表，每条有标题、简介、标签，像「作品」"},
   notes: {name:"文章",  hint:"列表点进去读全文，像「随笔」"},
   album: {name:"照片",  hint:"分组相册，像「回忆」"},
-  plan:  {name:"时间轴",hint:"分阶段的目标，带状态标记，像「规划」"},
   ledger:{name:"台账",  hint:"一条一笔的记录，字段自己定，可搜索可筛选"},
   map:   {name:"路线图",hint:"分叉的人生地图：走过的路、当前位置、前面的岔口"}
 };
@@ -248,13 +247,12 @@ var DEFAULT_SECTIONS = [
    hi:"#8d1620",mid:"#c22630",lo:"#680d15",ink:"#faeceb"},
   {id:"album",name:"回忆",sub:"生命里舍不得忘的时刻",type:"album",
    hi:"#3f6d68",mid:"#5b9089",lo:"#2c514d",ink:"#0f2320"},
-  {id:"plan",name:"规划",sub:"暂时的版本，随时会改",type:"plan",
+  {id:"plan",name:"规划",sub:"暂时的版本，随时会改",type:"map",
    hi:"#9aad2a",mid:"#c8e026",lo:"#75851f",ink:"#1c2103"}
 ];
 
 function blankFor(type){
   if(type==="text")  return "";
-  if(type==="plan")  return {updated:"", note:"", groups:[]};
   if(type==="map")   return {updated:"", note:"", nodes:[]};
   return [];
 }
@@ -291,7 +289,7 @@ function normalize(d){
     d.sections = clone(DEFAULT_SECTIONS);
     d.store = {
       about:d.about||"", works:d.works||[], notes:d.notes||[],
-      album:d.album||[], plan:d.plan||{updated:"",note:"",groups:[]}
+      album:d.album||[], plan:d.plan||{updated:"",note:"",nodes:[]}
     };
     delete d.about; delete d.works; delete d.notes; delete d.album; delete d.plan;
   }
@@ -752,64 +750,6 @@ function compress(file,cb){
   fr.readAsDataURL(file);
 }
 
-function panePlan(sec){
-  var LB={doing:"进行中",todo:"计划中",done:"已完成",paused:"暂缓"};
-  var v=$("#view"), pl=D.store[sec.id], base="store|"+sec.id;
-  pl.groups = pl.groups || [];
-  v.innerHTML=secHead(sec)+'<p class="hint">改完记得更新下面的日期。</p>'
-    +'<div class="f"><label>顶部那段话</label><textarea data-path="'+base+'|note" rows="3">'+esc(pl.note||"")+'</textarea></div>'
-    +'<div class="f"><label>最后更新</label><input data-path="'+base+'|updated" value="'+esc(pl.updated||"")+'">'
-    +'<p class="tip">例如：2026 年 8 月</p></div>'
-    +'<div id="list"></div><button class="add" id="addG">+ 新增一个阶段</button>';
-  bind(v);
-  var list=$("#list",v);
-  pl.groups.forEach(function(g,gi){
-    g.items=g.items||[];
-    var gb=base+"|groups|"+gi;
-    var node=el('<div class="item collapsed">'+itemBar("阶段 "+(gi+1),g.horizon)+'<div class="item-body">'
-      +'<div class="f"><label>阶段名</label><input data-path="'+gb+'|horizon" data-name value="'+esc(g.horizon||"")+'"></div>'
-      +'<div id="it'+gi+'"></div>'
-      +'<button class="add" data-addi style="margin-top:8px">+ 在这个阶段里加一条</button></div></div>');
-    list.appendChild(node); bind(node);
-    wireItem(node,pl.groups,gi,function(){ panePlan(sec); },g.horizon);
-    var ibox=$("#it"+gi,node);
-    g.items.forEach(function(it,ii){
-      var ib=gb+"|items|"+ii;
-      var sub=el('<div style="border-left:2px solid var(--line);padding-left:14px;margin-bottom:18px">'
-        +'<div class="f"><label>目标</label><input data-path="'+ib+'|title" value="'+esc(it.title||"")+'"></div>'
-        +'<div class="row two">'
-        +'<div class="f"><label>时间</label><input data-path="'+ib+'|when" value="'+esc(it.when||"")+'"></div>'
-        +'<div class="f"><label>状态</label><select data-path="'+ib+'|status">'
-        +Object.keys(LB).map(function(k){
-            return '<option value="'+k+'"'+(it.status===k?" selected":"")+'>'+LB[k]+'</option>';}).join("")
-        +'</select></div></div>'
-        +'<div class="f"><label>说明</label><textarea data-path="'+ib+'|detail" rows="2">'+esc(it.detail||"")+'</textarea></div>'
-        +'<div style="display:flex;gap:6px">'
-        +'<button class="btn mini" data-i="up">↑</button>'
-        +'<button class="btn mini" data-i="down">↓</button>'
-        +'<button class="btn mini danger" data-i="del">删除这条</button></div></div>');
-      ibox.appendChild(sub); bind(sub);
-      $$("[data-i]",sub).forEach(function(b){
-        b.addEventListener("click",function(){
-          var a=b.getAttribute("data-i"),A=pl.groups[gi].items;
-          if(a==="up"&&ii>0) A.splice(ii-1,0,A.splice(ii,1)[0]);
-          if(a==="down"&&ii<A.length-1) A.splice(ii+1,0,A.splice(ii,1)[0]);
-          if(a==="del"){ if(!confirm("删除「"+it.title+"」？")) return; A.splice(ii,1); }
-          touch(); panePlan(sec);
-        });
-      });
-    });
-    $("[data-addi]",node).addEventListener("click",function(e){
-      e.stopPropagation();
-      pl.groups[gi].items.push({title:"新目标",when:"",status:"todo",detail:""});
-      touch(); panePlan(sec);
-    });
-  });
-  $("#addG").addEventListener("click",function(){
-    pl.groups.push({horizon:"新阶段",items:[]}); touch(); panePlan(sec);
-  });
-}
-
 function paneLedger(sec){
   var v=$("#view"), arr=D.store[sec.id];
   sec.fields = sec.fields || [];
@@ -982,7 +922,6 @@ function go(id){
   else if(sec.type==="list")  paneList(sec);
   else if(sec.type==="notes") paneNotes(sec);
   else if(sec.type==="album") paneAlbum(sec);
-  else if(sec.type==="plan")   panePlan(sec);
   else if(sec.type==="ledger") paneLedger(sec);
   else if(sec.type==="map")    paneMap(sec);
   window.scrollTo(0,0);

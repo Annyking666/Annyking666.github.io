@@ -7,6 +7,13 @@
 <meta name="description" content="个人记录">
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23fdfcfa'/%3E%3Cpath d='M16 4 L28 16 L16 28 L4 16 Z' fill='%2317140f'/%3E%3C/svg%3E">
+<!-- 分享到微信 / iMessage 等应用时的预览卡片：只给标题和口令提示，不带任何具体内容 -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="社会研究记录 · 需要口令">
+<meta property="og:description" content="需要口令才能查看。">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="社会研究记录 · 需要口令">
+<meta name="twitter:description" content="需要口令才能查看。">
 <style>
 @font-face{
   font-family:"RK Serif";
@@ -78,7 +85,7 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
 
 /* 背景：台阶远山照片，静止不动，只做极轻微的呼吸 */
 .gate-bg-img{position:absolute;inset:0;z-index:-4;
-  background-image:url("photos/cover_stairs.png");
+  background-image:url("photos/cover_stairs.jpg");
   background-size:cover;background-position:center;background-repeat:no-repeat;
   background-color:var(--bg)}
 
@@ -663,36 +670,6 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
   font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;
   padding:2px 9px;border-radius:2px;border:1px solid var(--warn,#ffb86b);color:#ffb86b}
 
-/* 规划 */
-.plan-note{padding:16px 18px;border-left:3px solid var(--c-mid);background:var(--bg-panel);
-  border-radius:0 4px 4px 0;font-size:14.5px;margin-bottom:12px}
-.plan-updated{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.12em;
-  color:var(--slate);margin-bottom:38px}
-.horizon{margin-bottom:44px}
-.horizon-title{font-family:var(--font-mono);font-size:12px;letter-spacing:.2em;
-  color:var(--slate-bright);display:flex;align-items:center;gap:14px;margin-bottom:18px}
-.horizon-title::after{content:"";flex:1;height:1px;background:var(--line)}
-.track{position:relative;padding-left:26px}
-.track::before{content:"";position:absolute;left:5px;top:8px;bottom:8px;width:1px;background:var(--line)}
-.step{position:relative;padding:12px 0}
-.dot{position:absolute;left:-26px;top:20px;width:11px;height:11px;border-radius:50%;
-  border:1.5px solid var(--slate);background:var(--bg)}
-.step-title{font-size:16px;font-weight:600;color:var(--slate-bright);line-height:1.6}
-.step-when{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.1em;
-  color:var(--slate);margin-top:3px}
-.step-detail{font-size:14.5px;color:var(--slate);margin-top:var(--s1);max-width:var(--measure)}
-.badge{display:inline-block;margin-left:10px;vertical-align:2px;font-family:var(--font-mono);
-  font-size:11px;letter-spacing:.08em;padding:2px 9px;border-radius:2px;border:1px solid currentColor}
-.s-doing .dot{border-color:var(--accent);background:var(--accent);
-  box-shadow:0 0 0 5px var(--accent-soft),0 0 14px rgba(23,20,15,.18)}
-.s-doing .badge{color:var(--accent)}
-.s-done .dot{border-color:var(--slate-light);background:var(--slate-light)}
-.s-done .badge,.s-done .step-title{color:var(--slate-light)}
-.s-todo .badge{color:var(--slate)}
-.s-paused .dot{border-style:dashed}
-.s-paused .badge{color:var(--slate)}
-.s-paused .step-title,.s-paused .step-detail{opacity:.65}
-
 .foot{font-family:var(--font-mono);font-size:11.5px;line-height:2;color:var(--slate);
   margin-top:64px;padding-top:22px;border-top:1px solid var(--line);opacity:.7}
 .empty-msg{font-size:14.5px;color:var(--slate);padding:20px 0}
@@ -1009,7 +986,7 @@ var DEFAULTS = [
    hi:"#8d1620",mid:"#c22630",lo:"#680d15",ink:"#faeceb"},
   {id:"album",name:"回忆",sub:"生命里舍不得忘的时刻",type:"album",
    hi:"#3f6d68",mid:"#5b9089",lo:"#2c514d",ink:"#0f2320"},
-  {id:"plan",name:"规划",sub:"暂时的版本，随时会改",type:"plan",
+  {id:"plan",name:"规划",sub:"暂时的版本，随时会改",type:"map",
    hi:"#9aad2a",mid:"#c8e026",lo:"#75851f",ink:"#1c2103"}
 ];
 var FOLDERS = (SITE.sections && SITE.sections.length) ? SITE.sections.slice() : DEFAULTS.slice();
@@ -1043,10 +1020,6 @@ function countOf(f){
   if(f.type==="album"){
     var n=0; (d||[]).forEach(function(g){ n += ((g.photos||[]).length); });
     return n + " 张";
-  }
-  if(f.type==="plan"){
-    var m=0; ((d&&d.groups)||[]).forEach(function(g){ m += ((g.items||[]).length); });
-    return m + " 条";
   }
   if(f.type==="ledger") return ((d&&d.length)||0) + " 笔";
   if(f.type==="map"){
@@ -1233,19 +1206,6 @@ function allTags(){
   });
   return Object.keys(m).sort(function(a,b){ return m[b]-m[a]; })
     .map(function(t){ return {tag:t, n:m[t]}; });
-}
-
-/* 正在做的事 */
-function doingList(){
-  var out=[];
-  FOLDERS.forEach(function(f){
-    if(f.type!=="plan") return;
-    var d = contentOf(f.id);
-    ((d&&d.groups)||[]).forEach(function(g){
-      (g.items||[]).forEach(function(it){ if(it.status==="doing") out.push(it.title); });
-    });
-  });
-  return out;
 }
 
 /* ============================================================
@@ -1443,29 +1403,6 @@ function viewAlbum(f){
   }).join("");
   return shell(f, b);
 }
-
-function viewPlan(f){
-  var pl = contentOf(f.id) || {};
-  var LAB={doing:"进行中",todo:"计划中",done:"已完成",paused:"暂缓"};
-  var b = "";
-  if(pl.note) b += '<div class="plan-note prose">'+md(pl.note)+'</div>';
-  if(pl.updated) b += '<p class="plan-updated">最后更新 · '+esc(pl.updated)+'</p>';
-  b += (pl.groups||[]).map(function(g){
-    return '<section class="horizon"><h3 class="horizon-title">'+esc(g.horizon)+'</h3>'
-      + '<div class="track">'+(g.items||[]).map(function(it){
-          var st = LAB[it.status] ? it.status : "todo";
-          return '<div class="step s-'+st+'"><span class="dot"></span>'
-            + '<h4 class="step-title">'+esc(it.title)
-            + '<span class="badge">'+LAB[st]+'</span></h4>'
-            + (it.when?'<p class="step-when">'+esc(it.when)+'</p>':'')
-            + (it.detail?'<p class="step-detail">'+esc(it.detail)+'</p>':'')
-            + '</div>';
-        }).join("")+'</div></section>';
-  }).join("");
-  if(!b) b = emptyBox(f);
-  return shell(f, b);
-}
-
 
 function viewLedger(f){
   var rows = contentOf(f.id) || [];
@@ -1809,7 +1746,6 @@ function viewSection(f, sub){
   if(f.type==="list")  return viewList(f);
   if(f.type==="notes") return sub ? viewNote(f, sub) : viewNotes(f);
   if(f.type==="album") return viewAlbum(f);
-  if(f.type==="plan")  return viewPlan(f);
   if(f.type==="ledger") return viewLedger(f);
   if(f.type==="map")    return viewMap(f);
   return shell(f, emptyBox(f));
