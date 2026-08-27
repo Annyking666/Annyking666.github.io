@@ -120,6 +120,9 @@ p.hint{font-size:13.5px;color:var(--slate);margin-bottom:20px}
 .prev ul{list-style:none;margin-bottom:12px}
 .prev li{padding-left:18px;position:relative}
 .prev li::before{content:"—";position:absolute;left:0;color:var(--accent)}
+.prev .md-img{margin:14px 0}
+.prev .md-img img{max-width:100%;display:block;border-radius:6px}
+.prev .md-img figcaption{margin-top:6px;font-size:11.5px;color:var(--slate)}
 
 .modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;
   padding:20px;background:rgba(4,10,22,.9)}
@@ -343,6 +346,9 @@ function md(src){
     if(b.indexOf("> ")===0) return "<blockquote>"+inline(esc(b.replace(/^>\s?/gm,"")).replace(/\n/g,"<br>"))+"</blockquote>";
     if(/^[-*]\s/.test(b)) return "<ul>"+b.split("\n").map(function(l){
       return "<li>"+inline(esc(l.replace(/^[-*]\s+/,"")))+"</li>";}).join("")+"</ul>";
+    var mImg = b.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+    if(mImg) return '<figure class="md-img"><img src="'+esc(mImg[2])+'" alt="'+esc(mImg[1])+'" loading="lazy">'
+      + (mImg[1] ? '<figcaption>'+esc(mImg[1])+'</figcaption>' : '') + '</figure>';
     return "<p>"+inline(esc(b)).replace(/\n/g,"<br>")+"</p>";
   }).join("");
 }

@@ -435,6 +435,13 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opa
 .prose li{position:relative;padding-left:20px;margin-bottom:6px}
 .prose li::before{content:"—";position:absolute;left:0;color:var(--c-mid);
   font-family:var(--font-mono);font-size:13px}
+
+/* 正文里插的图（Markdown 的 ![说明](路径) 语法） */
+.md-img{margin:20px 0}
+.md-img img{max-width:100%;display:block;border-radius:6px;
+  box-shadow:0 0 0 1px rgba(23,20,15,.08)}
+.md-img figcaption{margin-top:8px;font-size:12px;letter-spacing:.03em;
+  color:var(--slate);font-family:var(--font-mono)}
 .link{color:var(--slate-bright);border-bottom:1px solid rgba(23,20,15,.25);
   transition:color .2s var(--ease),border-color .2s var(--ease)}
 .link:hover{color:var(--accent);border-color:var(--accent)}
@@ -965,6 +972,9 @@ function md(src){
     if(b.indexOf("> ")===0) return "<blockquote>"+inline(esc(b.replace(/^>\s?/gm,"")).replace(/\n/g,"<br>"))+"</blockquote>";
     if(/^[-*]\s/.test(b)) return "<ul>"+b.split("\n").map(function(l){
       return "<li>"+inline(esc(l.replace(/^[-*]\s+/,"")))+"</li>";}).join("")+"</ul>";
+    var mImg = b.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+    if(mImg) return '<figure class="md-img"><img src="'+esc(mImg[2])+'" alt="'+esc(mImg[1])+'" loading="lazy">'
+      + (mImg[1] ? '<figcaption>'+esc(mImg[1])+'</figcaption>' : '') + '</figure>';
     return "<p>"+inline(esc(b)).replace(/\n/g,"<br>")+"</p>";
   }).join("");
 }
